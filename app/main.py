@@ -6,6 +6,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
 from dotenv import load_dotenv
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 # Load environment variables
 load_dotenv()
@@ -37,9 +39,10 @@ try:
 except Exception as e:
     website_info = {"error": f"Could not load website info: {str(e)}"}
 app.mount("/static", StaticFiles(directory="test_frontend"), name="static")
+
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+async def root():
+    return FileResponse("test_frontend/index.html")
 
 @app.get("/about")
 def read_about():
