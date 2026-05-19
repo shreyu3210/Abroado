@@ -36,7 +36,7 @@ try:
         website_info = json.load(f)
 except Exception as e:
     website_info = {"error": f"Could not load website info: {str(e)}"}
-
+app.mount("/static", StaticFiles(directory="test_frontend"), name="static")
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
