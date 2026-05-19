@@ -1,0 +1,97 @@
+{
+  "website": {
+    "name": "Abroado",
+    "description": "Your trusted study abroad and visitor visa consultancy for UK and Australia. Expert guidance for international education and travel.",
+    "main_purpose": "Helps users apply for Study Visas and Visitor Visas to the UK and Australia, providing end-to-end guidance from university selection to visa approval."
+  },
+
+  "navigation": [
+    {
+      "page": "Home",
+      "url": "#home",
+      "description": "Hero section with statistics and an overview of placement achievements."
+    },
+    {
+      "page": "About",
+      "url": "#about",
+      "description": "Details about Abroado's mission, expertise, and 98% visa success rate."
+    },
+    {
+      "page": "Destinations",
+      "url": "#destinations",
+      "description": "Information about study and travel destinations (UK and Australia)."
+    },
+    {
+      "page": "Services",
+      "url": "#services",
+      "description": "Overview of Study Visa, Visitor Visa, and IELTS preparation services."
+    },
+    {
+      "page": "Success Stories",
+      "url": "#testimonials",
+      "description": "Testimonials and reviews from our successful visa applicants."
+    },
+    {
+      "page": "Contact",
+      "url": "#contact",
+      "description": "Free consultation request form, office address, and contact numbers."
+    }
+  ],
+
+  "faqs": [
+    {
+      "question": "What services does Abroado offer?",
+      "answer": "Abroado offers end-to-end consultancy for Study Visas and Visitor Visas to the UK and Australia. This includes university shortlisting, application/SOP writing, documentation support, IELTS/PTE preparation, and pre-departure briefings."
+    },
+    {
+      "question": "Which countries does Abroado specialize in?",
+      "answer": "We specialize in educational and travel visas for the United Kingdom (UK) and Australia."
+    },
+    {
+      "question": "What is Abroado's visa approval success rate?",
+      "answer": "We maintain a 98% visa approval success rate, achieved through rigorous documentation vetting and expert case guidance."
+    },
+    {
+      "question": "What documents are required to apply for a student visa?",
+      "answer": "Typically, you need a valid passport, academic transcripts, proof of English language proficiency (IELTS/PTE), a Statement of Purpose (SOP), letters of recommendation, and proof of sufficient funds."
+    },
+    {
+      "question": "Do you provide training for English proficiency tests?",
+      "answer": "Yes, we offer comprehensive training and preparation support for IELTS and PTE to ensure you achieve the scores required by your target institutions."
+    },
+    {
+      "question": "How can I book a free consultation with your team?",
+      "answer": "You can request a free consultation by filling out the contact form on our website or calling us directly at +91 123 456 7890."
+    }
+  ],
+
+  "services": [
+    {
+      "name": "Study Visa",
+      "description": "Pursue world-class education in the UK and Australia. We guide you from university selection to visa approval.",
+      "related_page": "#services"
+    },
+    {
+      "name": "Visitor Visa",
+      "description": "Explore the UK and Australia for tourism, business, or visiting family. Quick processing with high approval rates.",
+      "related_page": "#services"
+    },
+    {
+      "name": "IELTS Preparation",
+      "description": "Comprehensive preparation support and training to achieve required scores for university admissions.",
+      "related_page": "#services"
+    }
+  ],
+
+  "contact": {
+    "email": "info@abroado.com",
+    "phone": "+91 123 456 7890",
+    "hours": "Mon-Sat 9AM-6PM",
+    "address": "123 Education Lane, Business Hub, New Delhi, India 110001"
+  },
+
+  "policies": {
+    "refund": "Refunds on booking deposits or consultancy fees are processed within 7 business days under eligible cancellation conditions.",
+    "privacy": "User data is highly protected and not shared with third parties, in compliance with standard data privacy regulations."
+  }
+}

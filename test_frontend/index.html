@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abroado API & Chat Client</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- API Tester Section -->
+        <div class="card api-tester">
+            <h1>Abroado API Tester</h1>
+            <div class="test-section">
+                <button id="btn-root" class="btn">Test Root ( / )</button>
+                <button id="btn-about" class="btn">Test About ( /about )</button>
+                <button id="btn-test" class="btn">Test API ( /api/test )</button>
+            </div>
+            <div class="response-section">
+                <h2>API Response:</h2>
+                <div id="loader" class="loader hidden"></div>
+                <pre id="response-output">Click a button to test an endpoint...</pre>
+            </div>
+        </div>
+
+        <!-- Chat Interface Section -->
+        <div class="card chat-container">
+            <h1>Chat with Abroado AI</h1>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message system-message">
+                    Hello! I'm the Abroado AI Assistant. Ask me anything about our services, visa guides, contact information, or policies!
+                </div>
+            </div>
+            <form id="chat-form" class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Type a question about Abroado..." required autocomplete="off">
+                <button type="submit" id="btn-send" class="btn btn-send">Send</button>
+            </form>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
