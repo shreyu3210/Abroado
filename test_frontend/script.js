@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000'; // Make sure your FastAPI server is running on this port
+const API_BASE_URL = 'https://abroado.onrender.com'; // Make sure your FastAPI server is running on this port
 
 const endpoints = {
     root: '/',
