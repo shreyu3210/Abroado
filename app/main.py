@@ -2,6 +2,8 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 from app.schemas.chat import ChatRequest
 from app.services.chat_service import generate_chat_response
@@ -20,9 +22,26 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
+# Input Schemas
+class Message(BaseModel):
+    role: str
+    content: str
+
+class ChatRequest(BaseModel):
+    messages: List[Message]
+
+# Load website info once at startup
+WEBSITE_INFO_PATH = os.path.join(os.path.dirname(__file__), "web-info", "website_info.json")
+try:
+    with open(WEBSITE_INFO_PATH, "r", encoding="utf-8") as f:
+        website_info = json.load(f)
+except Exception as e:
+    website_info = {"error": f"Could not load website info: {str(e)}"}
+app.mount("/static", StaticFiles(directory="test_frontend"), name="static")
+
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+async def root():
+    return FileResponse("test_frontend/index.html")
 
 @app.get("/about")
 def read_about():
