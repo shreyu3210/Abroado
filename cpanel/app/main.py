@@ -1,5 +1,4 @@
 import os
-import json
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -8,12 +7,6 @@ from fastapi.responses import FileResponse
 
 from app.schemas.chat import ChatRequest
 from app.services.chat_service import generate_chat_response
-
-from app.db.database import engine, Base
-from app.routers import analytics
-
-# Create tables
-Base.metadata.create_all(bind=engine)
 
 # Load environment variables
 load_dotenv()
@@ -34,7 +27,13 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
+# Input Schemas
+class Message(BaseModel):
+    role: str
+    content: str
 
+class ChatRequest(BaseModel):
+    messages: List[Message]
 
 # Load website info once at startup
 WEBSITE_INFO_PATH = os.path.join(os.path.dirname(__file__), "web-info", "website_info.json")
@@ -43,13 +42,15 @@ try:
         website_info = json.load(f)
 except Exception as e:
     website_info = {"error": f"Could not load website info: {str(e)}"}
+app.mount("/static", StaticFiles(directory="test_frontend"), name="static")
 
+@app.get("/")
+async def root():
+    return FileResponse("test_frontend/index.html")
 
 @app.get("/about")
 def read_about():
     return {"message": "About Page"}
-
-app.include_router(analytics.router)
 
 @app.get("/api/test")
 def test_endpoint():
