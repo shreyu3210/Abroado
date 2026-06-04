@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 from app.db.database import get_db
-from app.models.analytics import Visitor, PageVisit, ChatbotLog, Lead
-from app.schemas.analytics import VisitorCreate, PageVisitCreate, ChatbotLogCreate, LeadCreate
+from app.models.analytics import Visitor, PageVisit, ChatbotLog, Lead, Assessment
+from app.schemas.analytics import VisitorCreate, PageVisitCreate, ChatbotLogCreate, LeadCreate, AssessmentCreate
 
 router = APIRouter(prefix="/api/analytics", tags=["analytics"])
 
@@ -55,5 +55,22 @@ async def create_lead(lead: LeadCreate, db: Session = Depends(get_db)):
         interest=lead.interest
     )
     db.add(new_lead)
+    db.commit()
+    return {"status": "success"}
+
+@router.post("/assessment")
+async def create_assessment(assessment: AssessmentCreate, db: Session = Depends(get_db)):
+    new_assessment = Assessment(
+        session_id=assessment.session_id,
+        email=assessment.email,
+        dob=assessment.dob,
+        qualification=assessment.qualification,
+        gap=assessment.gap,
+        country=assessment.country,
+        course=assessment.course,
+        budget=assessment.budget,
+        income=assessment.income
+    )
+    db.add(new_assessment)
     db.commit()
     return {"status": "success"}
