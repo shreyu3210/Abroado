@@ -42,3 +42,18 @@ class Lead(Base):
     phone = Column(String, nullable=False)
     interest = Column(String, nullable=True)
     created_at = Column(DateTime, default=get_ist_time)
+
+class Assessment(Base):
+    __tablename__ = "assessments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    session_id = Column(String, index=True, nullable=False)
+    email = Column(String, nullable=False)
+    dob = Column(String, nullable=True)
+    qualification = Column(String, nullable=True)
+    gap = Column(String, nullable=True)
+    country = Column(String, nullable=True)
+    course = Column(String, nullable=True)
+    budget = Column(String, nullable=True)
+    income = Column(String, nullable=True)
+    created_at = Column(DateTime, default=get_ist_time)

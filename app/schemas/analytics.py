@@ -23,3 +23,14 @@ class LeadCreate(BaseModel):
     name: str
     phone: str
     interest: Optional[str] = None
+
+class AssessmentCreate(BaseModel):
+    session_id: str
+    email: str
+    dob: Optional[str] = None
+    qualification: Optional[str] = None
+    gap: Optional[str] = None
+    country: Optional[str] = None
+    course: Optional[str] = None
+    budget: Optional[str] = None
+    income: Optional[str] = None
