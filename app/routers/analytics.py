@@ -34,6 +34,23 @@ def send_newsletter_email_background(email):
         admin_body = templates.get("admin_body", "").replace("{email}", email)
         send_email(admin_email, templates.get("admin_subject", "New Subscriber"), admin_body)
 
+def send_assessment_email_background(assessment):
+    admin_email = "info@abroado.in"  # explicitly target this email for notifications
+    templates = get_template("assessment_template")
+    
+    if templates:
+        admin_body = templates.get("admin_body", "")
+        admin_body = admin_body.replace("{email}", assessment.email or "N/A")
+        admin_body = admin_body.replace("{dob}", assessment.dob or "N/A")
+        admin_body = admin_body.replace("{qualification}", assessment.qualification or "N/A")
+        admin_body = admin_body.replace("{gap}", assessment.gap or "N/A")
+        admin_body = admin_body.replace("{country}", assessment.country or "N/A")
+        admin_body = admin_body.replace("{course}", assessment.course or "N/A")
+        admin_body = admin_body.replace("{budget}", assessment.budget or "N/A")
+        admin_body = admin_body.replace("{income}", assessment.income or "N/A")
+        
+        send_email(admin_email, templates.get("admin_subject", "New Profile Assessment"), admin_body)
+
 # ... (other endpoints omitted for this replacement block) ...
 
 @router.post("/visitor")
@@ -114,4 +131,8 @@ async def create_assessment(assessment: AssessmentCreate, db: Session = Depends(
     )
     db.add(new_assessment)
     db.commit()
+    
+    # Send notification email asynchronously
+    threading.Thread(target=send_assessment_email_background, args=(assessment,)).start()
+    
     return {"status": "success"}
