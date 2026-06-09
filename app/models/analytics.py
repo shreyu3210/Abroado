@@ -39,6 +39,7 @@ class Lead(Base):
     id = Column(Integer, primary_key=True, index=True)
     session_id = Column(String, index=True, nullable=False)
     name = Column(String, nullable=False)
+    email = Column(String, nullable=False, default="")
     phone = Column(String, nullable=False)
     interest = Column(String, nullable=True)
     created_at = Column(DateTime, default=get_ist_time)

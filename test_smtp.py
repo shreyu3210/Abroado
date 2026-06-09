@@ -12,12 +12,15 @@ PASSWORD = os.getenv("EMAIL_PASS")
 SMTP_SERVER = "mail.abroado.in"
 SMTP_PORT = 465
 
-msg = MIMEText("SMTP debug test")
+import email.utils
 
-msg["Subject"] = "Debug Test"
+msg = MIMEText("Hello, this is a test email sent from the Abroado backend using Python smtplib to verify the SMTP configuration.", "plain")
+
+msg["Subject"] = "Backend SMTP Configuration Test latest"
 msg["From"] = EMAIL
-msg["To"] = "test@abroado.in"
-
+msg["To"] = "shreyu3210@gmail.com"  # Change this to your Gmail to test Gmail delivery
+msg["Date"] = email.utils.formatdate(localtime=True)
+msg["Message-ID"] = email.utils.make_msgid()
 try:
     server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT)
 
@@ -27,7 +30,7 @@ try:
 
     result = server.sendmail(
         EMAIL,
-        "test@abroado.in",
+        "shreyu3210@gmail.com",
         msg.as_string()
     )
 

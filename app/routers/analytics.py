@@ -2,9 +2,39 @@ from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.models.analytics import Visitor, PageVisit, ChatbotLog, Lead, Assessment
-from app.schemas.analytics import VisitorCreate, PageVisitCreate, ChatbotLogCreate, LeadCreate, AssessmentCreate
+from app.schemas.analytics import VisitorCreate, PageVisitCreate, ChatbotLogCreate, LeadCreate, AssessmentCreate, NewsletterCreate
+from app.services.email_service import send_email, get_template
+import threading
+import os
 
 router = APIRouter(prefix="/api/analytics", tags=["analytics"])
+
+def send_lead_emails_background(name, email, phone, interest):
+    admin_email = os.getenv("EMAIL_USER")
+    templates = get_template("contact_template")
+    
+    if templates:
+        # Send to User
+        user_body = templates.get("user_body", "").replace("{name}", name).replace("{interest}", interest or "our services")
+        send_email(email, templates.get("user_subject", "Thank you!"), user_body)
+        
+        # Send to Admin (or info@abroado.info if configured)
+        admin_body = templates.get("admin_body", "").replace("{name}", name).replace("{email}", email).replace("{phone}", phone).replace("{interest}", interest or "None")
+        admin_subject = templates.get("admin_subject", "New Lead").replace("{name}", name)
+        send_email(admin_email, admin_subject, admin_body)
+
+def send_newsletter_email_background(email):
+    admin_email = os.getenv("EMAIL_USER")
+    templates = get_template("newsletter_template")
+    
+    if templates:
+        user_body = templates.get("user_body", "")
+        send_email(email, templates.get("user_subject", "Subscription Confirmed"), user_body)
+        
+        admin_body = templates.get("admin_body", "").replace("{email}", email)
+        send_email(admin_email, templates.get("admin_subject", "New Subscriber"), admin_body)
+
+# ... (other endpoints omitted for this replacement block) ...
 
 @router.post("/visitor")
 async def create_visitor(visitor: VisitorCreate, request: Request, db: Session = Depends(get_db)):
@@ -51,11 +81,22 @@ async def create_lead(lead: LeadCreate, db: Session = Depends(get_db)):
     new_lead = Lead(
         session_id=lead.session_id,
         name=lead.name,
+        email=lead.email,
         phone=lead.phone,
         interest=lead.interest
     )
     db.add(new_lead)
     db.commit()
+    
+    # Send email asynchronously
+    threading.Thread(target=send_lead_emails_background, args=(lead.name, lead.email, lead.phone, lead.interest)).start()
+    
+    return {"status": "success"}
+
+@router.post("/newsletter")
+async def subscribe_newsletter(newsletter: NewsletterCreate, db: Session = Depends(get_db)):
+    # You can also save this to a Newsletter subscriber table if needed later
+    threading.Thread(target=send_newsletter_email_background, args=(newsletter.email,)).start()
     return {"status": "success"}
 
 @router.post("/assessment")

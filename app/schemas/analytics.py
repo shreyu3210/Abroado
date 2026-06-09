@@ -21,6 +21,7 @@ class ChatbotLogCreate(BaseModel):
 class LeadCreate(BaseModel):
     session_id: str
     name: str
+    email: str
     phone: str
     interest: Optional[str] = None
 
@@ -34,3 +35,7 @@ class AssessmentCreate(BaseModel):
     course: Optional[str] = None
     budget: Optional[str] = None
     income: Optional[str] = None
+
+class NewsletterCreate(BaseModel):
+    session_id: str
+    email: str

@@ -12,12 +12,18 @@ from app.services.chat_service import generate_chat_response
 from app.db.database import engine, Base
 from app.routers import analytics
 
-# Create tables
+# Create tables 
 Base.metadata.create_all(bind=engine)
 
 # Load environment variables
 load_dotenv()
 
+
+# app = FastAPI(
+#         docs_url=None, 
+#         redoc_url=None, 
+#         openapi_url=None
+#     )
 app = FastAPI()
 
 # Add CORS middleware to allow requests from specific domains

@@ -1,0 +1,36 @@
+name: Deploy Python Backend to cPanel
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy-backend:
+    name: 🚀 Deploy Backend Files
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+
+    - name: 🗂️ Isolate specific files for upload
+      # This step copies ONLY the 'app' folder and 'requirements.txt' to a clean folder.
+      # This guarantees your logs, env files, or passenger_wsgi.py are never overwritten.
+      run: |
+        mkdir deploy_folder
+        cp -r app deploy_folder/
+        cp requirements.txt deploy_folder/
+        
+        # cPanel Python trick: Creating this file tells Passenger to reboot the app
+        mkdir -p deploy_folder/tmp
+        touch deploy_folder/tmp/restart.txt
+
+    - name: 📂 Sync files to cPanel
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+      with:
+        server: ${{ secrets.BACKEND_FTP_SERVER }}
+        username: ${{ secrets.BACKEND_FTP_USERNAME }}
+        password: ${{ secrets.BACKEND_FTP_PASSWORD }}
+        # We target the clean folder we just created
+        local-dir: ./deploy_folder/ 
+        server-dir: ./

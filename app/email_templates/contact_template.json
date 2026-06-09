@@ -1,0 +1,6 @@
+{
+  "user_subject": "Thank you for contacting Abroado!",
+  "user_body": "<div style=\"font-family: Arial, sans-serif; color: #333;\"><h2>Hello {name},</h2><p>Thank you for reaching out to us. We have successfully received your inquiry.</p><p><strong>Your Details:</strong><br>{interest}</p><p>Our team will review your details and get back to you within 24 hours.</p><p>If your matter is urgent, feel free to contact us directly at <strong>+91 7778832033</strong> or reply to this email.</p><br><p>Best regards,</p><p><strong>The Abroado Team</strong></p></div>",
+  "admin_subject": "🔔 New Lead Received - {name}",
+  "admin_body": "<div style=\"font-family: Arial, sans-serif; color: #333;\"><h2>New Lead Alert</h2><p>A new contact form submission has been received.</p><ul><li><strong>Name:</strong> {name}</li><li><strong>Email:</strong> {email}</li><li><strong>Phone:</strong> {phone}</li><li><strong>Details:</strong><br>{interest}</li></ul><p>Please respond to this inquiry as soon as possible.</p></div>"
+}
