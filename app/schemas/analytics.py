@@ -27,6 +27,8 @@ class LeadCreate(BaseModel):
 
 class AssessmentCreate(BaseModel):
     session_id: str
+    name: Optional[str] = None
+    surname: Optional[str] = None
     email: str
     dob: Optional[str] = None
     qualification: Optional[str] = None

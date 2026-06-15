@@ -21,7 +21,7 @@ jobs:
         cp -r app deploy_folder/
         cp requirements.txt deploy_folder/
         
-        # cPanel Python trick: Creating this file tells Passenger to reboot the app
+        
         mkdir -p deploy_folder/tmp
         touch deploy_folder/tmp/restart.txt
 
@@ -31,6 +31,6 @@ jobs:
         server: ${{ secrets.BACKEND_FTP_SERVER }}
         username: ${{ secrets.BACKEND_FTP_USERNAME }}
         password: ${{ secrets.BACKEND_FTP_PASSWORD }}
-        # We target the clean folder we just created
+        
         local-dir: ./deploy_folder/ 
         server-dir: ./

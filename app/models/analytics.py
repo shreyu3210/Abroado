@@ -15,23 +15,23 @@ class Visitor(Base):
     source = Column(String, nullable=True)
     created_at = Column(DateTime, default=get_ist_time)
 
-class PageVisit(Base):
-    __tablename__ = "page_visits"
+# class PageVisit(Base):
+#     __tablename__ = "page_visits"
+# 
+#     id = Column(Integer, primary_key=True, index=True)
+#     session_id = Column(String, index=True, nullable=False)
+#     page_url = Column(String, nullable=False)
+#     time_spent_seconds = Column(Float, default=0.0)
+#     scroll_percentage = Column(Float, default=0.0)
+#     created_at = Column(DateTime, default=get_ist_time)
 
-    id = Column(Integer, primary_key=True, index=True)
-    session_id = Column(String, index=True, nullable=False)
-    page_url = Column(String, nullable=False)
-    time_spent_seconds = Column(Float, default=0.0)
-    scroll_percentage = Column(Float, default=0.0)
-    created_at = Column(DateTime, default=get_ist_time)
-
-class ChatbotLog(Base):
-    __tablename__ = "chatbot_logs"
-
-    id = Column(Integer, primary_key=True, index=True)
-    session_id = Column(String, index=True, nullable=False)
-    question = Column(String, nullable=False)
-    created_at = Column(DateTime, default=get_ist_time)
+# class ChatbotLog(Base):
+#     __tablename__ = "chatbot_logs"
+# 
+#     id = Column(Integer, primary_key=True, index=True)
+#     session_id = Column(String, index=True, nullable=False)
+#     question = Column(String, nullable=False)
+#     created_at = Column(DateTime, default=get_ist_time)
 
 class Lead(Base):
     __tablename__ = "leads"
@@ -49,6 +49,8 @@ class Assessment(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     session_id = Column(String, index=True, nullable=False)
+    name = Column(String, nullable=True)
+    surname = Column(String, nullable=True)
     email = Column(String, nullable=False)
     dob = Column(String, nullable=True)
     qualification = Column(String, nullable=True)

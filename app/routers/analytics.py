@@ -1,10 +1,9 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, BackgroundTasks
 from sqlalchemy.orm import Session
 from app.db.database import get_db
-from app.models.analytics import Visitor, PageVisit, ChatbotLog, Lead, Assessment
-from app.schemas.analytics import VisitorCreate, PageVisitCreate, ChatbotLogCreate, LeadCreate, AssessmentCreate, NewsletterCreate
+from app.models.analytics import Visitor, Lead, Assessment
+from app.schemas.analytics import VisitorCreate, LeadCreate, AssessmentCreate, NewsletterCreate
 from app.services.email_service import send_email, get_template
-import threading
 import os
 
 router = APIRouter(prefix="/api/analytics", tags=["analytics"])
@@ -40,6 +39,8 @@ def send_assessment_email_background(assessment):
     
     if templates:
         admin_body = templates.get("admin_body", "")
+        admin_body = admin_body.replace("{name}", assessment.name or "N/A")
+        admin_body = admin_body.replace("{surname}", assessment.surname or "N/A")
         admin_body = admin_body.replace("{email}", assessment.email or "N/A")
         admin_body = admin_body.replace("{dob}", assessment.dob or "N/A")
         admin_body = admin_body.replace("{qualification}", assessment.qualification or "N/A")
@@ -71,30 +72,30 @@ async def create_visitor(visitor: VisitorCreate, request: Request, db: Session =
     db.commit()
     return {"status": "success"}
 
-@router.post("/page_visit")
-async def create_page_visit(page_visit: PageVisitCreate, db: Session = Depends(get_db)):
-    new_visit = PageVisit(
-        session_id=page_visit.session_id,
-        page_url=page_visit.page_url,
-        time_spent_seconds=page_visit.time_spent_seconds,
-        scroll_percentage=page_visit.scroll_percentage
-    )
-    db.add(new_visit)
-    db.commit()
-    return {"status": "success"}
+# @router.post("/page_visit")
+# async def create_page_visit(page_visit: PageVisitCreate, db: Session = Depends(get_db)):
+#     new_visit = PageVisit(
+#         session_id=page_visit.session_id,
+#         page_url=page_visit.page_url,
+#         time_spent_seconds=page_visit.time_spent_seconds,
+#         scroll_percentage=page_visit.scroll_percentage
+#     )
+#     db.add(new_visit)
+#     db.commit()
+#     return {"status": "success"}
 
-@router.post("/chatbot_log")
-async def create_chatbot_log(log: ChatbotLogCreate, db: Session = Depends(get_db)):
-    new_log = ChatbotLog(
-        session_id=log.session_id,
-        question=log.question
-    )
-    db.add(new_log)
-    db.commit()
-    return {"status": "success"}
+# @router.post("/chatbot_log")
+# async def create_chatbot_log(log: ChatbotLogCreate, db: Session = Depends(get_db)):
+#     new_log = ChatbotLog(
+#         session_id=log.session_id,
+#         question=log.question
+#     )
+#     db.add(new_log)
+#     db.commit()
+#     return {"status": "success"}
 
 @router.post("/lead")
-async def create_lead(lead: LeadCreate, db: Session = Depends(get_db)):
+async def create_lead(lead: LeadCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     new_lead = Lead(
         session_id=lead.session_id,
         name=lead.name,
@@ -106,20 +107,22 @@ async def create_lead(lead: LeadCreate, db: Session = Depends(get_db)):
     db.commit()
     
     # Send email asynchronously
-    threading.Thread(target=send_lead_emails_background, args=(lead.name, lead.email, lead.phone, lead.interest)).start()
+    background_tasks.add_task(send_lead_emails_background, lead.name, lead.email, lead.phone, lead.interest)
     
     return {"status": "success"}
 
 @router.post("/newsletter")
-async def subscribe_newsletter(newsletter: NewsletterCreate, db: Session = Depends(get_db)):
+async def subscribe_newsletter(newsletter: NewsletterCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     # You can also save this to a Newsletter subscriber table if needed later
-    threading.Thread(target=send_newsletter_email_background, args=(newsletter.email,)).start()
+    background_tasks.add_task(send_newsletter_email_background, newsletter.email)
     return {"status": "success"}
 
 @router.post("/assessment")
-async def create_assessment(assessment: AssessmentCreate, db: Session = Depends(get_db)):
+async def create_assessment(assessment: AssessmentCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     new_assessment = Assessment(
         session_id=assessment.session_id,
+        name=assessment.name,
+        surname=assessment.surname,
         email=assessment.email,
         dob=assessment.dob,
         qualification=assessment.qualification,
@@ -133,6 +136,6 @@ async def create_assessment(assessment: AssessmentCreate, db: Session = Depends(
     db.commit()
     
     # Send notification email asynchronously
-    threading.Thread(target=send_assessment_email_background, args=(assessment,)).start()
+    background_tasks.add_task(send_assessment_email_background, assessment)
     
     return {"status": "success"}
